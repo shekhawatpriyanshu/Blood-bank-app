@@ -1,13 +1,9 @@
 import axios from 'axios';
 
-// ✅ Automatically picks from .env file
 const API = axios.create({
-  baseURL:  process.env.REACT_APP_BASEURL  || "http://localhost:8080/api/v1"
-  // if using CRA (Create React App), use:
-  // baseURL: process.env.REACT_APP_BASEURL || "http://localhost:8080/api/v1"
+  baseURL: process.env.REACT_APP_BASEURL, // CRA uses REACT_APP_ prefix
 });
 
-// ✅ Attach token if available
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem('token');
   if (token) {
