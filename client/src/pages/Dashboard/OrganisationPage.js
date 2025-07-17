@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Layout from "./../../components/shared/Layout/Layout";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import API from "../../services/API";
 
 const OrganisationPage = () => {
-  // get current user
   const { user } = useSelector((state) => state.auth);
   const [data, setData] = useState([]);
-  //find org records
-  const getOrg = async () => {
+
+  // ✅ Wrap getOrg with useCallback to safely use it in useEffect
+  const getOrg = useCallback(async () => {
     try {
       if (user?.role === "donar") {
         const { data } = await API.get("/inventory/get-orgnaisation");
-        //   console.log(data);
         if (data?.success) {
           setData(data?.organisations);
         }
-      }
-      if (user?.role === "hospital") {
+      } else if (user?.role === "hospital") {
         const { data } = await API.get(
           "/inventory/get-orgnaisation-for-hospital"
         );
-        //   console.log(data);
         if (data?.success) {
           setData(data?.organisations);
         }
@@ -30,15 +27,15 @@ const OrganisationPage = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [user?.role]); // ✅ Depend on user.role
 
   useEffect(() => {
     getOrg();
-  }, [user]);
+  }, [getOrg]); // ✅ Now safe
 
   return (
     <Layout>
-      <table className="table ">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">Name</th>
