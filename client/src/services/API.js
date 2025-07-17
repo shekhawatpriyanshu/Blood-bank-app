@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_BASEURL, // CRA uses REACT_APP_ prefix
+  baseURL: "https://blood-bank-app-9t1b.onrender.com/api/v1" , // CRA uses REACT_APP_ prefix
 });
 
 API.interceptors.request.use((req) => {
