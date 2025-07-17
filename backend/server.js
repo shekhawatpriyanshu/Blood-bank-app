@@ -20,9 +20,6 @@ app.use(cors({origin:["https://blood-bank-app-1-euqx.onrender.com"],credentials:
 app.use(morgan("dev"));
 
 //routes
-app.get("/", (req, res) => {
-  res.send("Blood Bank API is running...");
-});
 // 1 test route
 app.use("/api/v1/test", require("./routes/testRoutes"));
 app.use("/api/v1/auth", require("./routes/authRoutes"));
@@ -33,6 +30,9 @@ app.use("/api/v1/admin", require("./routes/adminRoutes"));
 //port
 const PORT = process.env.PORT || 8080;
 
+app.get("/", (req, res) => {
+  res.send("Blood Bank API is running...");
+});
 //listen
 app.listen(PORT, () => {
   console.log(
