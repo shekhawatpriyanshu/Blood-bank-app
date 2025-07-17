@@ -16,7 +16,7 @@ const app = express();
 
 //middlewares
 app.use(express.json());
-app.use(cors(origin:"http://localhost:8080/api/v1",credentials:true));
+app.use(cors({origin:"http://localhost:8080/api/v1",credentials:true}));
 app.use(morgan("dev"));
 
 //routes
