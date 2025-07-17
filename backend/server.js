@@ -16,7 +16,7 @@ const app = express();
 
 //middlewares
 app.use(express.json());
-app.use(cors({origin:["https://blood-bank-app-1-euqx.onrender.com","http://localhost:5173"],credentials:true}));
+app.use(cors({origin:["https://blood-bank-app-1-euqx.onrender.com"],credentials:true}));
 app.use(morgan("dev"));
 
 //routes
