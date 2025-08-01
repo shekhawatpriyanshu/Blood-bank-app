@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import InputType from "./InputType";
 import { Link } from "react-router-dom";
 import { handleLogin, handleRegister } from "../../../services/authService";
-import validator from "validator";
 
 const Form = ({ formType, submitBtn, formTitle }) => {
   const [email, setEmail] = useState("");
@@ -14,41 +13,27 @@ const Form = ({ formType, submitBtn, formTitle }) => {
   const [website, setWebsite] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-
-  const [emailError, setEmailError] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Email validation
-    if (!validator.isEmail(email)) {
-      setEmailError("Please enter a valid email address.");
-      return;
-    } else {
-      setEmailError("");
-    }
-
-    if (formType === "login") {
-      return handleLogin(e, email, password, role);
-    } else if (formType === "register") {
-      return handleRegister(
-        e,
-        name,
-        role,
-        email,
-        password,
-        phone,
-        organisationName,
-        address,
-        hospitalName,
-        website
-      );
-    }
-  };
-
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={(e) => {
+          if (formType === "login")
+            return handleLogin(e, email, password, role);
+          else if (formType === "register")
+            return handleRegister(
+              e,
+              name,
+              role,
+              email,
+              password,
+              phone,
+              organisationName,
+              address,
+              hospitalName,
+              website
+            );
+        }}
+      >
         <h1 className="text-center">{formTitle}</h1>
         <hr />
         <div className="d-flex mb-3">
@@ -62,7 +47,7 @@ const Form = ({ formType, submitBtn, formTitle }) => {
               onChange={(e) => setRole(e.target.value)}
               defaultChecked
             />
-            <label htmlFor="donarRadio" className="form-check-label">
+            <label htmlFor="adminRadio" className="form-check-label">
               Donar
             </label>
           </div>
@@ -106,28 +91,21 @@ const Form = ({ formType, submitBtn, formTitle }) => {
             </label>
           </div>
         </div>
-
-        {/* switch case rendering fields */}
+        {/* switch statement */}
         {(() => {
-          switch (formType) {
-            case "login":
+          //eslint-disable-next-line
+          switch (true) {
+            case formType === "login": {
               return (
                 <>
                   <InputType
-                    labelText={"Email"}
+                    labelText={"email"}
                     labelFor={"forEmail"}
                     inputType={"email"}
                     name={"email"}
                     value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (emailError) setEmailError("");
-                    }}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
-                  {emailError && (
-                    <p className="text-danger">{emailError}</p>
-                  )}
-
                   <InputType
                     labelText={"Password"}
                     labelFor={"forPassword"}
@@ -138,7 +116,8 @@ const Form = ({ formType, submitBtn, formTitle }) => {
                   />
                 </>
               );
-            case "register":
+            }
+            case formType === "register": {
               return (
                 <>
                   {(role === "admin" || role === "donar") && (
@@ -158,9 +137,7 @@ const Form = ({ formType, submitBtn, formTitle }) => {
                       inputType={"text"}
                       name={"organisationName"}
                       value={organisationName}
-                      onChange={(e) =>
-                        setOrganisationName(e.target.value)
-                      }
+                      onChange={(e) => setOrganisationName(e.target.value)}
                     />
                   )}
                   {role === "hospital" && (
@@ -175,20 +152,13 @@ const Form = ({ formType, submitBtn, formTitle }) => {
                   )}
 
                   <InputType
-                    labelText={"Email"}
+                    labelText={"email"}
                     labelFor={"forEmail"}
                     inputType={"email"}
                     name={"email"}
                     value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (emailError) setEmailError("");
-                    }}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
-                  {emailError && (
-                    <p className="text-danger">{emailError}</p>
-                  )}
-
                   <InputType
                     labelText={"Password"}
                     labelFor={"forPassword"}
@@ -198,7 +168,7 @@ const Form = ({ formType, submitBtn, formTitle }) => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <InputType
-                    labelText={"Website"}
+                    labelText={"website"}
                     labelFor={"forWebsite"}
                     inputType={"text"}
                     name={"website"}
@@ -223,21 +193,20 @@ const Form = ({ formType, submitBtn, formTitle }) => {
                   />
                 </>
               );
-            default:
-              return null;
+            }
           }
         })()}
 
         <div className="d-flex flex-row justify-content-between">
           {formType === "login" ? (
             <p>
-              Not registered yet? Register
-              <Link to="/register"> Here!</Link>
+              Not registerd yet ? Register
+              <Link to="/register"> Here !</Link>
             </p>
           ) : (
             <p>
-              Already a user? Please
-              <Link to="/login"> Login!</Link>
+              ALready User Please
+              <Link to="/login"> Login !</Link>
             </p>
           )}
           <button className="btn btn-primary" type="submit">
